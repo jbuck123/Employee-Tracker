@@ -2,7 +2,21 @@
 // const path = require('path');
 // const mysql = require('mysql2');
 const inquirer = require("inquirer");
-function questionloop() {
+const connection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "Caughtin4k!",
+    database: "employee_info"
+})
+
+connection.connect(function(err) {
+    if (err) console.log(err);
+})
+
+
+startMenu()
+
+function startMenu() {
   inquirer
     .prompt([
       {
