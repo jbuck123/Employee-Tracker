@@ -156,8 +156,25 @@ function viewDepartments() {
 //ADD DEPARTMENT =================
 function addDepartment() {
   console.log("add department");
+  // this one seems the easiest because it is just adding a "name"
+
+  // not using an array of questions because it is just one question
+
+  inquirer.prompt([
+      {
+          type: 'input',
+          name: "newDepartment",
+          message: 'Enter new deparment name'
+      }
+  ]).then(answer => {
+    console.log('adding new department')
+    db.query(`INSERT INTO department (depName) VALUES ('${answer.newDepartment}')`);
+    startMenu();
+})
+
 }
 //EXIT =========================
 function exit(){
-    console.log('this will do something eventually')
+    console.log('Thank you for using my Employee Tracker')
 }
+
