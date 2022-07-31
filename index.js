@@ -81,12 +81,15 @@ function addEmployee() {
 
 connection.query(query, function (err, res) {
     if (err) throw err;
-
+// this is grabbing data from the roles table in the database
+// this is needed to update the prompt question "employee role."
     const roleChoices = res.map(({id, title, salary}) => ({
         value: id, title: `${title}`, salary: `${salary}`
     }));
     console.table(res);
-    console.log("role to insert")
+    console.log("roles")
+
+    // promptInsert!
 
 })
 
