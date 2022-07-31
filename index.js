@@ -1,6 +1,6 @@
-const ctable = require('console.table')
-// const path = require('path');
-const mysql = require('mysql2');
+const db = require('./db/connection')
+const cTable = require('console.table')
+const mysql = require('mysql2')
 const inquirer = require("inquirer");
 
 
@@ -68,7 +68,16 @@ function startMenu() {
 
 // VIEW EMPLOYEE -----------------
 function viewEmployee() {
-  console.log("view employed");
+  console.log("viewing employees");
+
+db.query('SELECT * FROM employee', (err, data) => {
+    if (err) return console.log(err);
+
+    const empTable = cTable.getTable(data);
+
+    console.table(empTable);
+    startMenu()
+})
 
 
 }
@@ -76,22 +85,8 @@ function viewEmployee() {
 // ADD EMPLOYEE ----------------------
 function addEmployee() {
   console.log("adding employee!");
-  var query = `SELECT role.id, role.title, role.salary
-                FROM role`
 
-connection.query(query, function (err, res) {
-    if (err) throw err;
-// this is grabbing data from the roles table in the database
-// this is needed to update the prompt question "employee role."
-    const roleChoices = res.map(({id, title, salary}) => ({
-        value: id, title: `${title}`, salary: `${salary}`
-    }));
-    console.table(res);
-    console.log("roles")
-
-    // promptInsert!
-
-})
+// needs a way to check all the roles before asking the qustion 
 
 const employeePrompts = [ 
     {
