@@ -14,6 +14,7 @@ connection.connect(function(err) {
     if (err) console.log(err);
 })
 
+// starts the app 
 
 startMenu()
 
@@ -67,11 +68,27 @@ function startMenu() {
 // VIEW EMPLOYEE -----------------
 function viewEmployee() {
   console.log("view employed");
+
+
 }
 
 // ADD EMPLOYEE ----------------------
 function addEmployee() {
-  console.log("add employee");
+  console.log("adding employee!");
+  var query = `SELECT role.id, role.title, role.salary
+                FROM role`
+
+connection.query(query, function (err, res) {
+    if (err) throw err;
+
+    const roleChoices = res.map(({id, title, salary}) => ({
+        value: id, title: `${title}`, salary: `${salary}`
+    }));
+    console.table(res);
+    console.log("role to insert")
+
+})
+
 }
 // UPDATE ROLE --==================
 function updateRole() {
