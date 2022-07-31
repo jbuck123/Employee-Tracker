@@ -124,6 +124,14 @@ function updateRole() {
 // VIEW ROLE ========================
 function viewRoles() {
   console.log(" view role");
+  db.query('SELECT * FROM roles', (err, data) => {
+    if (err) return console.log(err);
+
+    const roleTable = cTable.getTable(data);
+
+    console.table(roleTable);
+    startMenu()
+})
 }
 // ADD ROLE ====================
 function addRole() {
@@ -132,7 +140,18 @@ function addRole() {
 
 //VEW DEPARTMENTS ======================
 function viewDepartments() {
-  console.log("view department");
+  console.log("viewing departments!");
+
+  db.query('SELECT * FROM department', (err, data) => {
+    if (err) return console.log(err);
+
+    const deparmentTable = cTable.getTable(data);
+
+    console.table(deparmentTable);
+    startMenu()
+})
+
+  
 }
 //ADD DEPARTMENT =================
 function addDepartment() {
