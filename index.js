@@ -1,7 +1,8 @@
-// const table = require('console.table')
+const ctable = require('console.table')
 // const path = require('path');
 const mysql = require('mysql2');
 const inquirer = require("inquirer");
+
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -88,6 +89,34 @@ connection.query(query, function (err, res) {
     console.log("role to insert")
 
 })
+
+const employeePrompts = [ 
+    {
+        type: 'input',
+        name: 'first_name',
+        message: 'What is the new employee first name?'
+    },
+    {
+        type: 'input',
+        name: 'last_name',
+        message: 'What is the new employee last name?'
+    },
+    {
+        type: 'input',
+        name: 'first_name',
+        message: 'What is the new employee first name?'
+    },
+    {
+        type: 'list',
+        name: 'role',
+        message: 'What is the new employee role?',
+        choices: ['junior dev','senior dev', 'sales lead', 'manager']
+    },
+]
+
+
+
+
 
 }
 // UPDATE ROLE --==================
