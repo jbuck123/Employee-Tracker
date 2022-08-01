@@ -4,22 +4,23 @@ const mysql = require('mysql2')
 const inquirer = require("inquirer");
 
 
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "Caughtin4k!",
     database: "employee_info"
 })
 
-connection.connect(function(err) {
-    if (err) console.log(err);
-})
+// connection.connect(function(err) {
+//     if (err) console.log(err);
+// })
 
 // starts the app 
 
 startMenu()
 
 function startMenu() {
+    console.log('test');
   inquirer
     .prompt([
       {
@@ -34,11 +35,12 @@ function startMenu() {
           "add role",
           "view all departments",
           "add department",
-          "exit",
-        ],
-      },
+          "exit"
+        ]
+      }
     ])
     .then((answers) => {
+        console.log(answers);
       if (answers.whatdo == "view all employees") {
         viewEmployee();
       }
@@ -133,8 +135,9 @@ function viewRoles() {
     startMenu()
 })
 }
-// ADD ROLE ====================
-function addRole() {
+// ============== ADD ROLE ====================
+
+function addRole() { // this section needs some polishing but functioning at a base level currently
   console.log("add a role");
   inquirer.prompt([
     {
@@ -143,9 +146,9 @@ function addRole() {
         message: 'Please enter the title of the role'
     },
     {
-        type: 'input',
+        type: 'number',
         name: "salary",
-        message: 'Please enter a salary for role'
+        message: 'Please enter a salary '
         // in the futur i should check to ensure user is inputing a number 
         // aka NAN stuff
     },  
@@ -158,9 +161,8 @@ function addRole() {
     }
 ]).then(answer => {
     console.log("adding role")
-    db.query(`INSERT INTO roles (title) VALUES ('${answer.newRole}')`)
-    db.query(`INSERT INTO roles (salary) VALUES ('${answer.salary}')`)
-    db.query(`INSERT INTO roles (department_id) VALUES ('${answer.department_id}')`)
+    db.query(`INSERT INTO roles (title, salary, department_id) VALUES ('${answer.newRole}','${answer.salary}','${answer.department_id}')`)
+    
     startMenu();
 })
 
