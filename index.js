@@ -2,6 +2,7 @@ const db = require('./db/connection')
 const cTable = require('console.table')
 const mysql = require('mysql2')
 const inquirer = require("inquirer");
+// const { query } = require('./db/connection');
 
 
 const connection = mysql.createPool({
@@ -20,7 +21,7 @@ const connection = mysql.createPool({
 startMenu()
 
 function startMenu() {
-    console.log('test');
+    
   inquirer
     .prompt([
       {
@@ -40,7 +41,8 @@ function startMenu() {
       }
     ])
     .then((answers) => {
-        console.log(answers);
+        
+
       if (answers.whatdo == "view all employees") {
         viewEmployee();
       }
@@ -71,14 +73,11 @@ function startMenu() {
 // VIEW EMPLOYEE -----------------
 function viewEmployee() {
   console.log("viewing employees");
-
-db.query('SELECT * FROM employee', (err, data) => {
-    if (err) return console.log(err);
-
-    const empTable = cTable.getTable(data);
-
-    console.table(empTable);
-    startMenu()
+let query = "SELECT * FROM employee";
+db.query(query, function(err, res) {
+    if (err) throw err; 
+    console.table(res);
+    startMenu();
 })
 
 
@@ -101,28 +100,57 @@ const employeePrompts = [
         name: 'last_name',
         message: 'What is the new employee last name?'
     },
+
     {
         type: 'input',
-        name: 'first_name',
-        message: 'What is the new employee first name?'
-    },
-    {
-        type: 'list',
         name: 'role',
-        message: 'What is the new employee role?',
-        choices: ['junior dev','senior dev', 'sales lead', 'manager']
+        message: 'What is the new employees role?',
+       
     },
+    
 ]
-
-
-
-
-
+inquirer.prompt(employeePrompts)
+.then((answer) => {
+    db.query(`INSERT INTO employees (first_name, last_name, role_id) VALUES ('${answer.first_name}','${answer.last_name}','${answer.role}')`, function(err, res){
+        if (err) throw err;
+        console.table(res);
+        startMenu
+    });
+});
 }
+    
+
 // UPDATE ROLE --==================
 function updateRole() {
-  console.log("update role");
-}
+  console.log("updating role");
+
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "Which employee would you like to update?",
+          name: "employeeUpdate"
+        },
+  
+        {
+          type: "input",
+          message: "What role do you want to update to?",
+          name: "updateRole"
+        }
+      ])
+      .then(function(answer) {
+     
+  
+        connection.query('UPDATE employee SET role_id=? WHERE first_name= ?',[answer.updateRole, answer.eeUpdate],function(err, res) {
+          if (err) throw err;
+          console.table(res);
+          startMenu();
+        });
+      });
+  }
+
+
+
 // VIEW ROLE ========================
 function viewRoles() {
   console.log(" view role");
