@@ -135,7 +135,35 @@ function viewRoles() {
 }
 // ADD ROLE ====================
 function addRole() {
-  console.log("add role");
+  console.log("add a role");
+  inquirer.prompt([
+    {
+        type: 'input',
+        name: "newRole",
+        message: 'Please enter the title of the role'
+    },
+    {
+        type: 'input',
+        name: "salary",
+        message: 'Please enter a salary for role'
+        // in the futur i should check to ensure user is inputing a number 
+        // aka NAN stuff
+    },  
+
+    {
+        type: 'input',
+        name: "department_id",
+        message: 'Please enter the department id '
+        // in the future this could be a list that shows current departments with there id.
+    }
+]).then(answer => {
+    console.log("adding role")
+    db.query(`INSERT INTO roles (title) VALUES ('${answer.newRole}')`)
+    db.query(`INSERT INTO roles (salary) VALUES ('${answer.salary}')`)
+    db.query(`INSERT INTO roles (department_id) VALUES ('${answer.department_id}')`)
+    startMenu();
+})
+
 }
 
 //VEW DEPARTMENTS ======================
