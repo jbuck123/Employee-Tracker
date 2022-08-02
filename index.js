@@ -99,7 +99,7 @@ function addEmployee() {
   });
 
   function promptInsert(roleOptions) {
-      console.log(roleOptions)
+    console.log(roleOptions);
     const employeePrompts = [
       {
         type: "input",
@@ -116,7 +116,7 @@ function addEmployee() {
         type: "list",
         name: "role",
         message: "What is the new employees role?",
-        choices: roleOptions
+        choices: roleOptions,
       },
       {
         type: "input",
@@ -140,8 +140,23 @@ function addEmployee() {
 
 // UPDATE ROLE --==================
 function updateRole() {
-  console.log("updating role");
+  var query = `SELECT roles.id, roles.title, roles.salary
+    FROM roles`;
 
+  db.query(query, function (err, res) {
+    if (err) throw err;
+    const roleOptions = res.map(({ id, title, salary }) => ({
+      value: id,
+      title: `${title}`,
+      salary: `${salary}`,
+    }));
+    console.table(res);
+    promptUpdate(roleOptions)
+  });
+}
+// two functions
+function promptUpdate(roleOptions)
+{
   inquirer
     .prompt([
       {
@@ -151,9 +166,10 @@ function updateRole() {
       },
 
       {
-        type: "input",
+        type: "list",
         message: "What role do you want to update to?",
         name: "updateRole",
+        choices: roleOptions
       },
     ])
     .then(function (answer) {
