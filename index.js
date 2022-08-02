@@ -161,7 +161,7 @@ function promptUpdate(roleOptions)
     .prompt([
       {
         type: "input",
-        message: "Which employee would you like to update?",
+        message: "Which employee would you like to update? please use first name",
         name: "employeeUpdate",
       },
 
@@ -175,7 +175,7 @@ function promptUpdate(roleOptions)
     .then(function (answer) {
       connection.query(
         "UPDATE employee SET role_id=? WHERE first_name= ?",
-        [answer.updateRole, answer.eeUpdate],
+        [answer.updateRole, answer.employeeUpdate],
         function (err, res) {
           if (err) throw err;
           console.table(res);
@@ -200,38 +200,62 @@ function viewRoles() {
 // ============== ADD ROLE ====================
 
 function addRole() {
+// another two funcitoner 
+
+var query = `SELECT department.id, department.depName
+    FROM department`;
+
+    db.query(query, function (err, res) {
+        if (err) throw err;
+        const depOptions = res.map(({ id, depName,}) => ({
+          value: id,
+          depName: `${depName}`,
+        
+        }));
+        console.table(res);
+        promptRole(depOptions);
+      });
+    
+
+
+
+
+function promptRole(depOptions){
+    console.log("add a role");
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "newRole",
+          message: "Please enter the title of the role",
+        },
+        {
+          type: "number",
+          name: "salary",
+          message: "Please enter a salary ",
+          // in the futur i should check to ensure user is inputing a number
+          // aka NAN stuff
+        },
+  
+        {
+          type: "list",
+          name: "department_id",
+          message: "Please enter the department id ",
+          choices: depOptions
+          // in the future this could be a list that shows current departments with there id.
+        },
+      ])
+      .then((answer) => {
+        console.log("adding role");
+        db.query(
+          `INSERT INTO roles (title, salary, department_id) VALUES ('${answer.newRole}','${answer.salary}','${answer.department_id}')`
+        );
+  
+        startMenu();
+      });
+}
   // this section needs some polishing but functioning at a base level currently
-  console.log("add a role");
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "newRole",
-        message: "Please enter the title of the role",
-      },
-      {
-        type: "number",
-        name: "salary",
-        message: "Please enter a salary ",
-        // in the futur i should check to ensure user is inputing a number
-        // aka NAN stuff
-      },
-
-      {
-        type: "input",
-        name: "department_id",
-        message: "Please enter the department id ",
-        // in the future this could be a list that shows current departments with there id.
-      },
-    ])
-    .then((answer) => {
-      console.log("adding role");
-      db.query(
-        `INSERT INTO roles (title, salary, department_id) VALUES ('${answer.newRole}','${answer.salary}','${answer.department_id}')`
-      );
-
-      startMenu();
-    });
+  
 }
 
 //VEW DEPARTMENTS ======================
