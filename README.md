@@ -19,7 +19,7 @@
     - mysql2
     - console table
 ### example of Use
-[Walkthrough Video](https://www.youtube.com/watch?v=1utfvSfVpcs)
+[Walkthrough Video](https://www.youtube.com/watch?v=l9p8lnwdsdQ)
 
 
 
